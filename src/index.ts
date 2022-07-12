@@ -4,33 +4,10 @@ import App from './app';
 import fs from 'fs';
 import https from 'https';
 import http from 'http';
-import { LOADIPHLPAPI } from 'dns';
 
 const app = new App().application;
 
-const logPath = './log/log.log';
-
-function ensureLog() {
-    const exists = fs.existsSync(logPath);
-    if(!exists) {
-        fs.writeFileSync(logPath, '');
-    }
-}
-
-function readLog() {
-    ensureLog();
-    return fs.readFileSync(logPath).toString('utf-8');
-}
-
-function writeLog(remoteAddress:any) {
-    const oldlog = readLog();
-    const now = new Date().toUTCString();
-    const newlog = `${now}: ${remoteAddress} 접속`;
-    fs.writeFileSync(logPath, `${newlog}\n`);
-}
-
 const httpServer = http.createServer((req, res) => {
-    writeLog(req.connection.remoteAddress);
     res.writeHead(301, { Location: 'https://' + req.headers['host'] + req.url });
     res.end();
 });
