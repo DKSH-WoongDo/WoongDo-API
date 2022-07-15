@@ -6,8 +6,29 @@ import https from 'https';
 import http from 'http';
 
 const app = new App().application;
+const logPath = './log/log.log';
+
+function ensureLog() {
+    const exist = fs.existsSync(logPath);
+    if (!exist) {
+        fs.writeFileSync(logPath, '');
+    }
+}
+
+function readLog() {
+    ensureLog();
+    return fs.readFileSync(logPath).toString('utf-8');
+}
+
+function writeLog(remoteAddress:any) {
+    const beforeLog = readLog();
+    const now = new Date().toUTCString();
+    const newLog = `${now}: ${remoteAddress} 접속`;
+    fs.writeFileSync(logPath, `${beforeLog}\n${newLog}`);
+}
 
 const httpServer = http.createServer((req, res) => {
+    writeLog(req.connection.remoteAddress);
     res.writeHead(301, { Location: 'https://' + req.headers['host'] + req.url });
     res.end();
 });
