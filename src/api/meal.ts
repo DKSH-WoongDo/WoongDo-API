@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
 import LRUCache from 'lru-cache';
 import * as dotenv from 'dotenv';
+import fs from 'fs';
 
 import { mealDataType } from '../types/';
 dotenv.config();

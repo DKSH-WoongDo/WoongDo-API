@@ -45,7 +45,12 @@
     "mysql": "^2.18.1",
     "node-jsencrypt-fix": "^1.0.0",
     "os": "^0.1.2",
+<<<<<<< HEAD
     "yarn": "^1.22.19"
+=======
+    "winston": "^3.8.1",
+    "winston-daily-rotate-file": "^4.7.1"
+>>>>>>> dbeec3374b089a768578c493280ff1b79fcd1eda
   },
   "keywords": []
 }
