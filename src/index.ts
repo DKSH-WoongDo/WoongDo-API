@@ -1,4 +1,4 @@
-import App from './app';
+/*import App from './app';
 
 // HTTPS CONFIGURE
 import fs from 'fs';
@@ -27,4 +27,12 @@ httpServer.listen(80, () => {
 
 httpsServer.listen(443, () => {
     console.log('HTTPS Server Start');
-});
+}); */
+
+import App from './app';
+
+const app = new App().application;
+
+app.listen(80, () => {
+    console.log(`hello`);
+})

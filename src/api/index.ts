@@ -15,6 +15,7 @@ import timetable from './timetable';
 import { jwtToken } from '../token';
 import * as dotenv from 'dotenv';
 import { jwtTokenType } from '../types';
+import test from './calendar/test';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ router.use('/api/addBook', addBook);
 router.use('/api/deleteBook', deleteBook);
 router.use('/api/meal', meal);
 router.use('/api/timetable', timetable);
+router.use('/api/calendar/test', test);
 
 router.post('/api/token', async (req: Request, res: Response, next: NextFunction) => {
     const { token }: { token: string } = Object.assign(req.body, req.query);
