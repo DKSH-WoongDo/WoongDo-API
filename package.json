@@ -41,16 +41,15 @@
     "https": "^1.0.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
+    "lru-cache": "^7.13.1",
     "moment-timezone": "^0.5.33",
     "mysql": "^2.18.1",
     "node-jsencrypt-fix": "^1.0.0",
     "os": "^0.1.2",
-<<<<<<< HEAD
-    "yarn": "^1.22.19"
-=======
+    "uuidv4": "^6.2.13",
     "winston": "^3.8.1",
-    "winston-daily-rotate-file": "^4.7.1"
->>>>>>> dbeec3374b089a768578c493280ff1b79fcd1eda
+    "winston-daily-rotate-file": "^4.7.1",
+    "yarn": "^1.22.19"
   },
   "keywords": []
 }
