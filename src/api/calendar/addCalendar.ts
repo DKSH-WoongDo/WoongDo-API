@@ -35,7 +35,7 @@ router.post('/', async (req: Request, res: Response) => {
     if (isError || returnValue.type !== "A") {
         return res.json({
             isError: true,
-            message: '당신은 선생님이 아니잖아',
+            message: '데이터 접근 권한이 없습니다.',
         });
     }
 
@@ -47,7 +47,7 @@ router.post('/', async (req: Request, res: Response) => {
         	message: '성공적으로 일정을 추가했습니다'
     	});
     }  catch(err: any) {
-	return res.json({isError: true, message: '쿼리 오류'});
+	return res.json({isError: true, message: err});
     }
 });
 
