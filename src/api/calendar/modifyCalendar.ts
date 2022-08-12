@@ -21,7 +21,7 @@ router.put('/', async (req: Request, res: Response) => {
 
     const { calendarID, title, s_date, e_date, content }: { calendarID: string, title: string, s_date: string, e_date: string, content: string } = Object.assign(req.body, req.query);
 
-    if (!title || !s_date || !e_date || !content) {
+    if (!calendarID || !title || !s_date || !e_date || !content) {
         return res.json({
             isError: true,
             message: '입력하지 않은 값들이 있습니다.',
@@ -38,14 +38,26 @@ router.put('/', async (req: Request, res: Response) => {
     }
 
     try {
-        await sql(`UPDATE ${process.env.MYSQL_DB}.calendar set title=?, sDate=?, eDate=?, content=? where calendarID=? and userID=?`,
+        const query1: any = await sql(`SELECT * FROM ${process.env.MYSQL_DB}.calendar WHERE calendarID=? AND userID=?`, [calendarID, cryptoHandle.AES_DEC(returnValue.id)]);
+        if (Array.isArray(query1) && query1.length === 0)
+            return res.json({
+                isError: true,
+                message: '일정이 존재하지 않습니다.'
+            });
+        const query2: any = await sql(`UPDATE ${process.env.MYSQL_DB}.calendar SET title=?, sDate=?, eDate=?, content=? WHERE calendarID=? AND userID=?`,
             [title, s_date, e_date, content, calendarID, cryptoHandle.AES_DEC(returnValue.id)]);
-
+        if (query2?.affectedRows == 0) {
+            return res.json({
+                isError: true,
+                message: '일정을 수정하지 못했습니다.'
+            });
+        }
         return res.json({
             isError: false,
-            message: '성공적으로 일정을 수정했습니다'
+            message: '성공적으로 일정을 수정했습니다.'
         });
-    } catch (err) {
+    }
+    catch (err) {
         return res.json({
             isError: true,
             message: err
