@@ -38,7 +38,7 @@ router.delete('/', async (req: Request, res: Response) => {
     }
 
     try {
-        const query1: any = await sql(`SELECT * FROM ${process.env.MYSQL_DB}.calendar WHERE calendarID=? AND userID=?`, [calendarID, cryptoHandle.AES_DEC(returnValue.id)]);
+        const query1: any = await sql(`SELECT * FROM ${process.env.MYSQL_DB}.calendar WHERE calendarID=?`, [calendarID]);
         if (Array.isArray(query1) && query1.length === 0)
             return res.json({
                 isError: true,
@@ -48,7 +48,7 @@ router.delete('/', async (req: Request, res: Response) => {
         if (query2?.affectedRows == 0) {
             return res.json({
                 isError: true,
-                message: '일정을 삭제하지 못했습니다.'
+                message: '다른 사람이 등록한 일정은 삭제할 수 없습니다.'
             });
         }
         return res.json({
