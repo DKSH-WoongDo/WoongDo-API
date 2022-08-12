@@ -5,7 +5,7 @@ const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
 
-router.post('/', async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
 
     const { targetDate }: { targetDate: string } = Object.assign(req.body, req.query);
 
@@ -17,7 +17,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     try {
-        const rows = await sql(`SELECT * FROM ${process.env.MYSQL_DB}.calendar WHERE DATE_FORMAT(sDate, '%Y-%m') = '?'`, [targetDate]);
+        const rows = await sql(`SELECT * FROM ${process.env.MYSQL_DB}.calendar WHERE DATE_FORMAT(sDate, '%Y-%m') = ?`, [targetDate]);
         return res.json({
             isError: false,
             message: '일정을 로드하는데 성공했습니다.',

@@ -9,7 +9,7 @@ const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: false }));
 
-router.put('/', async (req: Request, res: Response) => {
+router.delete('/', async (req: Request, res: Response) => {
     const userToken: string | null = req.headers.authorization as string ?? null;
 
     if (!userToken) {
