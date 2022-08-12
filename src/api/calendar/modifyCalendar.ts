@@ -21,7 +21,7 @@ router.put('/', async (req: Request, res: Response) => {
 
     const { calendarID, title, s_date, e_date, content }: { calendarID: string, title: string, s_date: string, e_date: string, content: string } = Object.assign(req.body, req.query);
 
-    if (!calendarID || !title || !s_date || !e_date || !content) {
+    if (!calendarID || !title || !s_date || !e_date) {
         return res.json({
             isError: true,
             message: '입력하지 않은 값들이 있습니다.',
