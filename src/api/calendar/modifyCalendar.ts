@@ -1,9 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 
-import { jwtTokenType } from '../../types/';
+import { jwtTokenType } from '../../types';
 import { jwtToken } from '../../token';
 import { sql } from '../../dbHandle';
-import { v4 as uuidv4 } from 'uuid';
 import { cryptoHandle } from '../../cryptoHandle';
 
 const router = express.Router();
@@ -20,9 +19,9 @@ router.post('/', async (req: Request, res: Response) => {
         });
     }
 
-    const { title, s_date, e_date, content }: { title: string, s_date: string, e_date: string, content: string } = Object.assign(req.body, req.query);
+    const { calendarID, title, s_date, e_date, content }: { calendarID: string, title: string, s_date: string, e_date: string, content: string } = Object.assign(req.body, req.query);
 
-    if (!title || !s_date || !e_date) {
+    if (!title || !s_date || !e_date || !content) {
         return res.json({
             isError: true,
             message: '입력하지 않은 값들이 있습니다.',
@@ -38,15 +37,19 @@ router.post('/', async (req: Request, res: Response) => {
         });
     }
 
-    const calendarID = cryptoHandle.SHA256(uuidv4());
     try {
-        await sql(`INSERT INTO ${process.env.MYSQL_DB}.calendar VALUES(?, ?, ?, ?, ?, ?, ?)`, [calendarID, cryptoHandle.AES_DEC(returnValue.id), cryptoHandle.AES_DEC(returnValue.name), title, s_date, e_date, content]);
+        await sql(`UPDATE ${process.env.MYSQL_DB}.calendar set title=?, sDate=?, eDate=?, content=? where calendarID=? and userID=?`,
+            [title, s_date, e_date, content, calendarID, cryptoHandle.AES_DEC(returnValue.id)]);
+
         return res.json({
             isError: false,
-            message: '성공적으로 일정을 추가했습니다'
+            message: '성공적으로 일정을 수정했습니다'
         });
-    } catch (err: any) {
-        return res.json({ isError: true, message: err });
+    } catch (err) {
+        return res.json({
+            isError: true,
+            message: err
+        })
     }
 });
 

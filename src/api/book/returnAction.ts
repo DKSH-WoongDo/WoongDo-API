@@ -30,7 +30,7 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
 
     const { isError, returnValue }: { isError: boolean, returnValue: jwtTokenType } = await jwtToken.verifyToken(userToken);
 
-    if (isError || returnValue.type !== "A") {
+    if (isError || returnValue.type !== 'A') {
         return res.json({
             isError: true,
             message: '데이터 접근 권한이 없습니다.',

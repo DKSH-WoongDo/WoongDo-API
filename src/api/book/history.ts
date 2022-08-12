@@ -21,7 +21,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     const { isLoanned, userID }: { isLoanned: string, userID: string } = Object.assign(req.body, req.query);
     const { isError, returnValue }: { isError: boolean, returnValue: jwtTokenType } = await jwtToken.verifyToken(userToken);
 
-    let option1: string = (returnValue.type === "A" ? (isLoanned === 'true' ? 'STATUS=1' : '') : '');
+    let option1: string = (returnValue.type === 'A' ? (isLoanned === 'true' ? 'STATUS=1' : '') : '');
     let option2: string = (userID ? `userID='${cryptoHandle.AES_DEC(userID)}'` : '');
 
     if (isError) {
