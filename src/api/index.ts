@@ -12,7 +12,10 @@ import deleteBook from './book/deleteBook';
 import history from './book/history';
 import loanAction from './book/loanAction';
 import returnAction from './book/returnAction';
+import viewCalendar from './calendar/viewCalendar';
 import addCalendar from './calendar/addCalendar';
+import deleteCalendar from './calendar/deleteCalendar';
+import modifyCalendar from './calendar/modifyCalendar';
 import { jwtToken } from '../token';
 import * as dotenv from 'dotenv';
 import { jwtTokenType } from '../types';
@@ -35,7 +38,10 @@ router.use('/api/book/deleteBook', deleteBook);
 router.use('/api/book/history', history);
 router.use('/api/book/loanAction', loanAction);
 router.use('/api/book/returnAction', returnAction);
+router.use('/api/calendar/viewCalendar', viewCalendar);
 router.use('/api/calendar/addCalendar', addCalendar);
+router.use('/api/calendar/deleteCalendar', deleteCalendar);
+router.use('/api/calendar/modifyCalendar', modifyCalendar);
 
 router.post('/api/token', async (req: Request, res: Response, next: NextFunction) => {
     const { token }: { token: string } = Object.assign(req.body, req.query);
