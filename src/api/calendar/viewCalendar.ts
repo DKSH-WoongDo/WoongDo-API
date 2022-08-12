@@ -10,14 +10,11 @@ router.get('/', async (req: Request, res: Response) => {
     const { targetDate, userID }: { targetDate: string, userID: string | null } = Object.assign(req.body, req.query);
 
     try {
-        const WHERE_CONDITION_USER_ID = userID ? { SYNTAX: 'userID=?', VALUE: userID } : {};
-        const WHERE_CONDITION_TARGET_DATE = targetDate ? { SYNTAX: 'DATE_FORMAT(sDate, "%Y-%m")=?', VALUE: targetDate } : {};
+        const WHERE_CONDITION_USER_ID = userID ? `userID=${userID}` : '';
+        const WHERE_CONDITION_TARGET_DATE = targetDate ? `DATE_FORMAT(sDate, "%Y-%m")=${targetDate}` : '';
         const AND_CONDITION = userID && targetDate ? 'AND' : '';
 
-        const rows = await sql(
-            `SELECT * FROM ${process.env.MYSQL_DB}.calendar WHERE ${WHERE_CONDITION_USER_ID.SYNTAX} ${AND_CONDITION} ${WHERE_CONDITION_TARGET_DATE.SYNTAX}`,
-            [WHERE_CONDITION_USER_ID.VALUE, WHERE_CONDITION_TARGET_DATE.VALUE]
-        );
+        const rows = await sql(`SELECT * FROM ${process.env.MYSQL_DB}.calendar WHERE ${WHERE_CONDITION_USER_ID} ${AND_CONDITION} ${WHERE_CONDITION_TARGET_DATE}`, []);
 
         return res.json({
             isError: false,
