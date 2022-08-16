@@ -1,5 +1,7 @@
-node_modules
-package-lock.json
 .env
 mysql.sql
 yarn.lock
+yarn-error.log
+
+/node_modules
+/dist
