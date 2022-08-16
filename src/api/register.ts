@@ -47,10 +47,12 @@ async function getSessionId() {
         );
         return false;
     } catch (err) {
-        if (axios.isAxiosError(err) && err.response)
-            sessionId = err.response.headers.location.split('/').at(-1);
-        else
+        if (axios.isAxiosError(err) && err.response) {
+            let x: string = err.response.headers.location as string;
+            sessionId = x.split('/').at(-1);
+        } else {
             return false;
+        }
     }
 
     const return_val: { sessionId: string | boolean; NET_SessionId: string } = {
@@ -117,14 +119,14 @@ router.post('/sendToken', async (req: Request, res: Response, next: NextFunction
 });
 
 router.post('/verify', async (req: Request, res: Response, next: NextFunction) => {
-    const { phoneNumber, key, NET_SessionId } = Object.assign(req.body, req.query);
+    const { phoneNumber, authToken, NET_SessionId } = Object.assign(req.body, req.query);
 
     try {
         await axios.post(
             BASE_URL + '/Register/ValidateAuthToken',
             qs.stringify({
                 PhoneNumber: phoneNumber,
-                AuthNumber: key,
+                AuthNumber: authToken,
             }),
             {
                 headers: {
@@ -178,7 +180,7 @@ router.post('/final', async (req: Request, res: Response, next: NextFunction) =>
                 SchoolIndex: '1089',
                 MobileNumber: cryptoHandle.AES_DEC(phoneNumber),
                 UserNickName: cryptoHandle.AES_DEC(userName),
-                AdmissionYear: '2022',
+                AdmissionYear: new Date().getFullYear(),
                 Account: cryptoHandle.AES_DEC(userID),
                 CheckAccountDuplication: 'true',
                 Password: cryptoHandle.AES_DEC(userPW),
@@ -192,8 +194,15 @@ router.post('/final', async (req: Request, res: Response, next: NextFunction) =>
             }
         );
 
-        await sql(`INSERT INTO ${process.env.MYSQL_DB}.user VALUES(?, ?, ?, ?, ?)`,
-            ['S', cryptoHandle.AES_DEC(userName), cryptoHandle.AES_DEC(userID), cryptoHandle.SHA256(cryptoHandle.AES_DEC(userPW)), cryptoHandle.SHA256(userID + '*#@^$' + userPW + '$842&3')]
+        await sql(`INSERT INTO ${process.env.MYSQL_DB}.user VALUES(?, ?, ?, ?, ?, ?)`,
+            [
+                'S',
+                cryptoHandle.AES_DEC(userName),
+                cryptoHandle.AES_DEC(userID),
+                cryptoHandle.SHA256(cryptoHandle.AES_DEC(userPW)),
+                cryptoHandle.SHA256(cryptoHandle.AES_DEC(phoneNumber)),
+                cryptoHandle.SHA256(userID + '*#@^$' + userPW + '$842&3')
+            ]
         );
 
         return res.json({
@@ -201,6 +210,7 @@ router.post('/final', async (req: Request, res: Response, next: NextFunction) =>
             message: '아이디 생성을 성공했습니다.'
         });
     } catch (err) {
+        console.log(err)
         return res.json({
             isError: true,
             message: '아이디 생성을 실패했습니다.',
