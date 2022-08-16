@@ -46,6 +46,7 @@
     "mysql": "^2.18.1",
     "node-jsencrypt-fix": "^1.0.0",
     "os": "^0.1.2",
+    "qs": "^6.11.0",
     "uuid": "^8.3.2"
   },
   "keywords": []
